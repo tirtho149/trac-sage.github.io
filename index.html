@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <!-- Meta tags for social media banners -->
+  <meta name="description" content="SAGE: Scalable Agentic Grounded Evaluation for Crop Disease Diagnosis">
+  <meta property="og:title" content="SAGE: Scalable Agentic Grounded Evaluation for Crop Disease Diagnosis"/>
+  <meta property="og:description" content="An agentic VLM diagnostic system grounded in a 1.1M-image, 53-crop, 259-disease dataset with source-cited symptom knowledge."/>
+  <meta property="og:url" content=""/>
+  <meta property="og:image" content="static/images/sage_teaser.png" />
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta name="twitter:title" content="SAGE: Scalable Agentic Grounded Evaluation for Crop Disease Diagnosis">
+  <meta name="twitter:description" content="An agentic VLM diagnostic system grounded in a 1.1M-image, 53-crop, 259-disease dataset with source-cited symptom knowledge.">
+  <meta name="twitter:image" content="static/images/sage_teaser.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>SAGE: Scalable Agentic Grounded Evaluation for Crop Disease Diagnosis</title>
+  <link rel="icon" type="image/x-icon" href="static/images/sage_teaser.png">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+  rel="stylesheet">
+
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script src="static/js/bulma-carousel.min.js"></script>
+  <script src="static/js/bulma-slider.min.js"></script>
+  <script src="static/js/index.js"></script>
+
+  <style>
+    .status-badge {
+      display: inline-block;
+      padding: 0.35em 0.9em;
+      border-radius: 999px;
+      background: #fff3cd;
+      color: #7a5b00;
+      border: 1px solid #ffe08a;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      font-size: 0.95rem;
+      margin-top: 0.5rem;
+    }
+    .key-numbers {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      margin: 1.5rem 0 0.5rem;
+    }
+    .key-number {
+      min-width: 140px;
+      padding: 1rem 1.25rem;
+      border: 1px solid #e8e8e8;
+      border-radius: 8px;
+      background: #fafafa;
+    }
+    .key-number .num {
+      display: block;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #2c3e50;
+      line-height: 1.1;
+    }
+    .key-number .lab {
+      display: block;
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: 0.25rem;
+    }
+  </style>
+</head>
+<body>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">SAGE: Scalable Agentic Grounded Evaluation for Crop Disease Diagnosis</h1>
+
+          <div class="is-size-5 publication-authors">
+            <!-- Paper authors -->
+            <div class="author-list">
+              <span class="author-block">
+                <a href="https://www.linkedin.com/in/arbab-arshad/" target="_blank">Muhammad Arbab Arshad</a><sup>1,*</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://www.linkedin.com/in/tirtho-roy-apon/" target="_blank">Tirtho Roy</a><sup>1,*</sup>,
+              </span>
+              <span class="author-block">
+                <a href="#" target="_blank">Yanben Shen</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="#" target="_blank">Dinakaran Elango</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="#" target="_blank">Shivani Chiranjeevi</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://www.agron.iastate.edu/people/singh-asheesh/" target="_blank">Asheesh K. Singh</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://www.engineering.iastate.edu/people/profile/baskarg/" target="_blank">Baskar Ganapathysubramanian</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://chinmayhegde.github.io/" target="_blank">Chinmay Hegde</a><sup>2</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://www.agron.iastate.edu/people/singh-arti-2/" target="_blank">Arti Singh</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://www.engineering.iastate.edu/people/profile/soumiks/" target="_blank">Soumik Sarkar</a><sup>1,&dagger;</sup>
+              </span>
+            </div>
+
+            <div class="is-size-5 publication-authors" style="margin-top: 0.75rem;">
+              <p><sup>1</sup> Iowa State University, USA &nbsp; <sup>2</sup> New York University, USA</p>
+              <p><sup>*</sup> Equal contribution &nbsp;&middot;&nbsp; <sup>&dagger;</sup> Corresponding author: <a href="mailto:soumiks@iastate.edu">soumiks@iastate.edu</a></p>
+              <p><span class="status-badge">Under Review</span></p>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!-- Paper link -->
+                <span class="link-block">
+                  <a href="#" target="_blank"
+                     class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                    <span>Paper (coming soon)</span>
+                  </a>
+                </span>
+
+                <!-- Code link -->
+                <span class="link-block">
+                  <a href="#" target="_blank"
+                     class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fab fa-github"></i></span>
+                    <span>Code (coming soon)</span>
+                  </a>
+                </span>
+
+                <!-- Dataset link -->
+                <span class="link-block">
+                  <a href="#" target="_blank"
+                     class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-database"></i></span>
+                    <span>Dataset (coming soon)</span>
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- banner image / teaser -->
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <h2 class="title is-3 has-text-centered">Overview of the SAGE Dataset and Pipeline</h2>
+      <img src="static/images/sage_teaser.png" alt="SAGE dataset and pipeline overview">
+      <h2 class="subtitle has-text-centered">
+        SAGE pairs an aggregated multi-crop disease image collection (~1.1M images, 53 crops, 259 diseases) with structured, source-cited symptom knowledge. Each disease entry carries organ tags, symptom descriptions, and per-field provenance: a source URL plus a verbatim supporting quote.
+      </h2>
+
+      <div class="key-numbers">
+        <div class="key-number"><span class="num">~1.1M</span><span class="lab">Images</span></div>
+        <div class="key-number"><span class="num">53</span><span class="lab">Crops</span></div>
+        <div class="key-number"><span class="num">259</span><span class="lab">Disease classes</span></div>
+        <div class="key-number"><span class="num">+15.2 pp</span><span class="lab">Mean accuracy gain from KB</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End banner image -->
+
+
+<!-- Paper abstract -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Plant disease diagnosis at scale is limited by the lack of datasets that cover enough crops and diseases. We compile a dataset of approximately 1.1M images spanning 53 crops and 259 disease classes, and complement it with a pipeline that automatically generates structured symptom descriptions with per-field provenance, where every fact traces back to a web source with a verbatim supporting quote. We use this combination to build a diagnostic system where each prediction is made by an autonomous reasoning agent that follows a guided chain of thought: it identifies the anatomical context of the test image, narrows candidates using symptom knowledge, and sequentially compares reference images, producing a full reasoning trace at every step. Adding symptom knowledge improves accuracy by an average of 15.2 percentage points at full reference budget, with consistent gains across all three evaluation crops. The system requires no task-specific training, works for any crop with reference images, and will directly benefit from future improvements in foundation model capabilities.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End paper abstract -->
+
+
+<!-- Contributions -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Contributions</h2>
+        <div class="content has-text-left">
+          <ol>
+            <li><b>Multi-crop disease image dataset.</b> 53 crops and 259 disease classes (~1.1M images), assembled from established benchmarks, expert-curated collections, and community sources, with multi-organ coverage (leaf, stem, root, seed, ear, head).</li>
+            <li><b>Source-first disease registry pipeline.</b> Given a crop name, the pipeline automatically produces structured symptom knowledge with per-field provenance. Every fact traces back to a specific web source with a verbatim supporting quote, audited by a domain expert.</li>
+            <li><b>Agentic diagnostic pipeline.</b> Each prediction is made by an autonomous reasoning agent that observes the test image, narrows candidates via an anatomical index, consults the symptom KB, and sequentially compares reference images, producing a full human-readable reasoning trace.</li>
+            <li><b>Systematic evaluation.</b> Across three crops of varying difficulty (Soybean, Corn, Mango), multiple reference budgets, knowledge base sources, and model tiers (Haiku, Sonnet, Opus).</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Dataset Distribution -->
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3 has-text-centered">SAGE Dataset Distribution</h2>
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <div class="publication-image">
+            <img src="static/images/sage_distribution.png" alt="Distribution of images across 53 crops and 259 disease classes" style="cursor: pointer; width: 100%; height: auto;">
+          </div>
+          <p class="description">
+            Distribution of images across 53 crops and 259 disease classes (~1.1M images). Unlike standard datasets that pair images with labels alone, each disease in SAGE carries structured, source-cited metadata including organ tags, symptom descriptions, source URLs, and verbatim quotes &mdash; generated automatically by the registry pipeline.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- System Overview -->
+<section class="hero is-small is-light">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3 has-text-centered">System Overview</h2>
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <div class="publication-image">
+            <img src="static/images/sage_system.png" alt="SAGE system overview: curation and agentic evaluation" style="cursor: pointer; width: 100%; height: auto;">
+          </div>
+          <p class="description">
+            <b>Curation (top):</b> The KB track turns web pages into a source-cited disease KB via automated discovery, extraction, and reconciliation, followed by an expert evidence audit of every cited verbatim quote. The image track collects raw images from multiple sources, applies an expert dedupe of class-name variants, then filters and tags by organ &mdash; producing reference/test splits and an anatomical index. <br>
+            <b>Demonstrated agentic evaluation (bottom):</b> Given a test image, a VLM agent observes the affected organ, narrows candidates via the anatomical index, consults KB symptoms, and sequentially compares reference images in an open-ended loop bounded by reference budget <i>k</i>, producing a prediction with a full step-by-step trace.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Results: Accuracy vs Reference Budget -->
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3 has-text-centered">Diagnostic Accuracy vs. Reference Budget</h2>
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <div class="publication-image">
+            <img src="static/images/sage_accuracy_vs_k.png" alt="Diagnostic accuracy vs reference budget across three crops" style="cursor: pointer; width: 100%; height: auto;">
+          </div>
+          <p class="description">
+            Diagnostic accuracy vs. reference budget <i>k</i> across three crops. The agent with internet KB consistently outperforms the no-KB baseline. At <i>k</i>=16, adding the knowledge base lifts Soybean from 31.1% to 51.4% and Corn from 42.0% to 64.8%; on Mango (4 classes) visual comparison alone already exceeds 90%.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Results Table -->
+<section class="hero is-small is-light">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Main Results (Sonnet)</h2>
+      <div class="content">
+        <p class="has-text-centered">
+          Diagnostic accuracy across crops, methods, and reference budgets <i>k</i>. Baseline is Agent (no KB) at <i>k</i>=0. Improvement over baseline shown in parentheses.
+        </p>
+        <div class="table-container">
+          <table class="table is-striped is-hoverable is-fullwidth">
+            <thead>
+              <tr>
+                <th>Crop</th>
+                <th>Method</th>
+                <th><i>k</i> = 0</th>
+                <th><i>k</i> = 1</th>
+                <th><i>k</i> = 4</th>
+                <th><i>k</i> = 8</th>
+                <th><i>k</i> = 16</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td rowspan="2"><b>Soybean</b> (25)</td>
+                <td>Agent (no KB)</td>
+                <td>31.1%</td>
+                <td>40.5% <small>(+9.5)</small></td>
+                <td>37.8% <small>(+6.8)</small></td>
+                <td>45.9% <small>(+14.9)</small></td>
+                <td>48.6% <small>(+17.6)</small></td>
+              </tr>
+              <tr>
+                <td>Agent + internet KB</td>
+                <td><b>44.6%</b> <small>(+13.5)</small></td>
+                <td><b>41.9%</b> <small>(+10.8)</small></td>
+                <td><b>48.6%</b> <small>(+17.6)</small></td>
+                <td><b>48.6%</b> <small>(+17.6)</small></td>
+                <td><b>51.4%</b> <small>(+20.3)</small></td>
+              </tr>
+              <tr>
+                <td rowspan="2"><b>Corn</b> (30)</td>
+                <td>Agent (no KB)</td>
+                <td>42.0%</td>
+                <td>43.2% <small>(+1.1)</small></td>
+                <td>46.6% <small>(+4.5)</small></td>
+                <td>52.3% <small>(+10.2)</small></td>
+                <td>54.5% <small>(+12.5)</small></td>
+              </tr>
+              <tr>
+                <td>Agent + internet KB</td>
+                <td><b>51.1%</b> <small>(+9.1)</small></td>
+                <td><b>52.3%</b> <small>(+10.2)</small></td>
+                <td><b>60.2%</b> <small>(+18.2)</small></td>
+                <td><b>60.2%</b> <small>(+18.2)</small></td>
+                <td><b>64.8%</b> <small>(+22.7)</small></td>
+              </tr>
+              <tr>
+                <td rowspan="2"><b>Mango</b> (4)</td>
+                <td>Agent (no KB)</td>
+                <td><b>92.5%</b></td>
+                <td>85.0% <small>(&minus;7.5)</small></td>
+                <td><b>92.5%</b> <small>(+0.0)</small></td>
+                <td>92.5% <small>(+0.0)</small></td>
+                <td>95.0% <small>(+2.5)</small></td>
+              </tr>
+              <tr>
+                <td>Agent + internet KB</td>
+                <td>87.5% <small>(&minus;5.0)</small></td>
+                <td><b>97.5%</b> <small>(+5.0)</small></td>
+                <td>92.5% <small>(+0.0)</small></td>
+                <td><b>97.5%</b> <small>(+5.0)</small></td>
+                <td>95.0% <small>(+2.5)</small></td>
+              </tr>
+              <tr style="background: #f0f0f0; font-weight: 600;">
+                <td rowspan="2">Mean &Delta; (pp)</td>
+                <td>Agent (no KB)</td>
+                <td>+0.0</td>
+                <td>+1.0</td>
+                <td>+3.8</td>
+                <td>+8.4</td>
+                <td>+10.9</td>
+              </tr>
+              <tr style="background: #f0f0f0; font-weight: 600;">
+                <td>Agent + internet KB</td>
+                <td>+5.9</td>
+                <td>+8.7</td>
+                <td>+11.9</td>
+                <td>+13.6</td>
+                <td><b>+15.2</b></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Reasoning Trace Highlight -->
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3 has-text-centered">Transparent Reasoning Traces</h2>
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <div class="publication-image">
+            <img src="static/images/sage_trace.png" alt="Example agent reasoning trace" style="cursor: pointer; width: 100%; height: auto;">
+          </div>
+          <p class="description">
+            Every prediction comes with a full, human-readable reasoning trace: the agent records which references it chose to view, what it observed at each step, the alternatives it considered, and the final diagnosis with a confidence score. This stands in contrast to single-pass classification, where a model produces a label with no visibility into the decision process.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Cost-Accuracy Tradeoff -->
+<section class="hero is-small is-light">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3 has-text-centered">Cost-Accuracy Tradeoff</h2>
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <div class="publication-image">
+            <img src="static/images/sage_cost_accuracy.png" alt="Cost-accuracy tradeoff across model tiers" style="cursor: pointer; width: 80%; height: auto;">
+          </div>
+          <p class="description">
+            Mean accuracy across all three crops with the internet KB. Increasing the reference budget <i>k</i> improves accuracy at growing cost, with diminishing returns beyond <i>k</i>=8. Model quality provides a complementary lever: at <i>k</i>=8, Opus achieves higher mean accuracy than Sonnet at <i>k</i>=16 for comparable cost, while Haiku is the cheapest option but substantially less accurate.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!--BibTex citation -->
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{arshad2025sage,
+  title   = {SAGE: Scalable Agentic Grounded Evaluation for Crop Disease Diagnosis},
+  author  = {Arshad, Muhammad Arbab and Roy, Tirtho and Shen, Yanben and
+             Elango, Dinakaran and Chiranjeevi, Shivani and Singh, Asheesh K. and
+             Ganapathysubramanian, Baskar and Hegde, Chinmay and Singh, Arti and
+             Sarkar, Soumik},
+  year    = {2025},
+  note    = {Under review}
+}</code></pre>
+  </div>
+</section>
+
+
+<!-- Team -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width has-text-centered">
+        <h2 class="title is-3"><span class="dvima">Team</span></h2>
+        <div class="columns is-multiline is-centered" style="max-width: 95%; padding-left: 10%;">
+
+          <!-- Team Member 1: Arbab -->
+          <div class="column is-one-fifth has-text-centered video-column">
+            <a href="https://www.linkedin.com/in/arbab-arshad/" target="_blank" style="border-bottom: none;">
+              <span class="image">
+                <img src="static/images/team/Arbab.png" alt="" style="width: 90%;" />
+              </span>
+              <span style="font-weight: bold;">Muhammad Arbab Arshad<sup>*</sup></span>
+            </a>
+          </div>
+
+          <!-- Team Member 2: Tirtho -->
+          <div class="column is-one-fifth has-text-centered video-column">
+            <a href="https://www.linkedin.com/in/tirtho-roy-apon/" target="_blank" style="border-bottom: none;">
+              <span class="image">
+                <img src="static/images/team/Tirtho.png" alt="" style="width: 90%;" />
+              </span>
+              <span style="font-weight: bold;">Tirtho Roy<sup>*</sup></span>
+            </a>
+          </div>
+
+          <!-- Team Member 3: Yanben -->
+          <div class="column is-one-fifth has-text-centered video-column">
+            <a href="#" target="_blank" style="border-bottom: none;">
+              <span class="image">
+                <img src="static/images/team/Yanben.png" alt="" style="width: 90%;" />
+              </span>
+              <span style="font-weight: bold;">Yanben Shen</span>
+            </a>
+          </div>
+
+          <!-- Team Member 4: Dinakaran -->
+          <div class="column is-one-fifth has-text-centered video-column">
+            <a href="#" target="_blank" style="border-bottom: none;">
+              <span class="image">
+                <img src="static/images/team/Dinakaran.png" alt="" style="width: 90%;" />
+              </span>
+              <span style="font-weight: bold;">Dinakaran Elango</span>
+            </a>
+          </div>
+
+          <!-- Team Member 5: Shivani -->
+          <div class="column is-one-fifth has-text-centered video-column">
+            <a href="#" target="_blank" style="border-bottom: none;">
+              <span class="image">
+                <img src="static/images/team/Shivani.png" alt="" style="width: 90%;" />
+              </span>
+              <span style="font-weight: bold;">Shivani Chiranjeevi</span>
+            </a>
+          </div>
+
+          <!-- Team Member 6: Asheesh -->
+          <div class="column is-one-fifth has-text-centered video-column">
+            <a href="https://www.agron.iastate.edu/people/singh-asheesh/" target="_blank" style="border-bottom: none;">
+              <span class="image">
+                <img src="static/images/team/Asheesh.png" alt="" style="width: 90%;" />
+              </span>
+              <span style="font-weight: bold;">Asheesh K. Singh</span>
+            </a>
+          </div>
+
+          <!-- Team Member 7: Baskar -->
+          <div class="column is-one-fifth has-text-centered video-column">
+            <a href="https://www.engineering.iastate.edu/people/profile/baskarg/" target="_blank" style="border-bottom: none;">
+              <span class="image">
+                <img src="static/images/team/Baskar.png" alt="" style="width: 88%;" />
+              </span>
+              <span style="font-weight: bold;">Baskar Ganapathysubramanian</span>
+            </a>
+          </div>
+
+          <!-- Team Member 8: Chinmay -->
+          <div class="column is-one-fifth has-text-centered video-column">
+            <a href="https://chinmayhegde.github.io/" target="_blank" style="border-bottom: none;">
+              <span class="image">
+                <img src="static/images/team/Chinmay1.png" alt="" style="width: 95%;" />
+              </span>
+              <span style="font-weight: bold;">Chinmay Hegde</span>
+            </a>
+          </div>
+
+          <!-- Team Member 9: Arti -->
+          <div class="column is-one-fifth has-text-centered video-column">
+            <a href="https://www.agron.iastate.edu/people/singh-arti-2/" target="_blank" style="border-bottom: none;">
+              <span class="image">
+                <img src="static/images/team/Arti.png" alt="" style="width: 92%;" />
+              </span>
+              <span style="font-weight: bold;">Arti Singh</span>
+            </a>
+          </div>
+
+          <!-- Team Member 10: Soumik -->
+          <div class="column is-one-fifth has-text-centered video-column">
+            <a href="https://www.engineering.iastate.edu/people/profile/soumiks/" target="_blank" style="border-bottom: none;">
+              <span class="image">
+                <img src="static/images/team/Soumik1.png" alt="" style="width: 92%;" />
+              </span>
+              <span style="font-weight: bold;">Soumik Sarkar<sup>&dagger;</sup></span>
+            </a>
+          </div>
+
+        </div>
+        <p style="margin-top: 1rem; font-size: 0.9rem; color: #555;">
+          <sup>*</sup> Equal contribution &nbsp;&middot;&nbsp; <sup>&dagger;</sup> Corresponding author
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+<!--End Team -->
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+            You are free to borrow the source code of this website, we just ask that you link back to this page in the footer. <br>
+            This website is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
